@@ -1,0 +1,61 @@
+Arguments: 
+  /Users/vijaykumar/.nvm/versions/node/v11.9.0/bin/node /usr/local/bin/yarn start
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.7/bin:/Users/vijaykumar/.nvm/versions/node/v11.9.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Xamarin Workbooks.app/Contents/SharedSupport/path-bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  11.9.0
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+    "name": "node_api_test",
+    "version": "1.0.0",
+    "description": "Intellect API Test",
+    "main": "server.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "node server.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "yes"
+    },
+    "keywords": [
+      "node",
+      "express",
+      "mongodb"
+    ],
+    "author": "vijay papasani",
+    "license": "ISC",
+    "dependencies": {
+      "mongodb": "^3.2.5"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c node server.js
+  Directory: /Users/vijaykumar/vijay/EX/node_api_test
+  Output:
+  
+      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
+      at ChildProcess.emit (events.js:197:13)
+      at maybeClose (internal/child_process.js:978:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:265:5)
