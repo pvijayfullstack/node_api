@@ -7,9 +7,28 @@ router.get('/', (req, res, next) => {
     })
 });
 
+// {
+// 	"type": "Sell",
+// 	"user": {
+// 		"name": "vijay"
+// 	},
+// 	"symbol": "",
+// 	"shares": 10,
+// 	"price": 12	
+// }
 router.post('/', (req, res, next) => {
+    const trade = {
+        type: req.body.type,
+        user: {
+            name: req.body.user.name
+        },
+        symbol: req.body.symbol,
+        shares: req.body.shares,
+        price: req.body.price
+    }
     res.status(201).json({
-        message: 'trade post'
+        message: 'trade post',
+        trade: trade
     })
 });
 
