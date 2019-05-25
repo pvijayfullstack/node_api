@@ -1,4 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const Trade = require('../models/trade')
+const User = require('../models/user')
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
@@ -17,15 +20,23 @@ router.get('/', (req, res, next) => {
 // 	"price": 12	
 // }
 router.post('/', (req, res, next) => {
-    const trade = {
+    const user = new User({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.user.name
+    });
+    const trade = new Trade({
+        _id: new mongoose.Types.ObjectId(),
         type: req.body.type,
-        user: {
-            name: req.body.user.name
-        },
+        user: user,
         symbol: req.body.symbol,
-        shares: req.body.shares,
         price: req.body.price
-    }
+    });
+    trade.save().then( result => {
+        console.log(result)
+    })
+    .catch( error => {
+        console.log(error);
+    })
     res.status(201).json({
         message: 'trade post',
         trade: trade

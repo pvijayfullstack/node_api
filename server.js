@@ -6,7 +6,7 @@ const app = require('./app');
 const port = process.env.PORT || 3000;
 
 mongoose.connect(
-    "mongodb+srv://vijay:Vijasdf@cluster0-vhox9.mongodb.net/test?retryWrites=true",
+    "mongodb+srv://vijay:Vijasdf@cluster0-vhox9.mongodb.net/trade_services?retryWrites=true",
     {useNewUrlParser: true}   
 )
 
