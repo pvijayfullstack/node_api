@@ -5,8 +5,14 @@ const User = require('../models/user')
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'trade get'
+    const trade = Trade.find({});
+    trade.exec( (error, trades) => {
+        if(error) {
+            return new Error("error:", error)
+        }
+        res.status(200).json({
+            data: trades
+        })
     })
 });
 
@@ -43,14 +49,36 @@ router.post('/', (req, res, next) => {
     })
 });
 
-router.get('/users/:userID', (req, res, next) => {
-    res.status(200).json({
-        message: 'trades user'
-    });
+router.get('/users/:userId', (req, res, next) => {
+    const trade = Trade.findOne({'user._id': req.params.userId });
+    trade.exec().then( trade => {
+        res.status(200).json({
+            data: trade
+        })
+    })
+    .catch( err => {
+        console.log("error:",err)
+        res.status(401).json({
+            data: "User was not found"
+        })
+    })
 });
 
-//type={tradeType}&start={startDate}&end={endDate}
+router.delete('/erase', (req, res, next) => {
+    const query = { id: req.body.id}
+    Trade.deleteOne(query, (err, trade) => {
+        if(err){
+            return new Error("Trade Id not found")
+        }
+        res.status(200).json({
+            message: "Trade was successfully deleted!",
+        })
+    })
+})
+
+//?type={tradeType}&start={startDate}&end={endDate}
 router.get('/stocks/:stockSymbol/trades', (req, res, next) => {
+    
     res.status(200).json({
         message: 'stack list'
     });

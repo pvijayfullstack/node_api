@@ -1,12 +1,21 @@
 const mongoose = require('mongoose');
 
+const userSchema = mongoose.Schema({
+    _id: mongoose.Types.ObjectId,
+    name: String,
+    createdAt: {
+        type: Date,
+        default: new Date()
+    }
+});
+
 const tradeSchema = mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     type: String,
-    user: Object,
+    user: [ userSchema ],
     symbol: String,
     shares: Number,
-    price: Number,
+    price: Number,  
     createdAt: {
         type: Date,
         default: Date.now
