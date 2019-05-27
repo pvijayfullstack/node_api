@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const moment = require('moment');
+const Joi = require('joi');
 const sortBy = require('lodash').sortBy;
 
 const Trade = require('../models/trade')
@@ -21,6 +22,21 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const schema = Joi.object().keys({
+        type: Joi.string().trim().required(),
+        shares: Joi.number()
+        .min(10)
+        .max(30),
+        price: Joi.number()
+        .min(130.42)
+        .max(195.65)
+    })
+
+    const {value , error} = Joi.validate(req.body, schema)
+    if(error && error.details) {
+        return res.status(401).json(error)
+    }
+
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.user.name
@@ -30,6 +46,7 @@ router.post('/', (req, res, next) => {
         type: req.body.type,
         user: user,
         symbol: req.body.symbol,
+        shares: req.body.shares,
         price: req.body.price
     });
     trade.save().then( result => {
