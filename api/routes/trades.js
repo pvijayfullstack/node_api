@@ -1,7 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const moment = require('moment');
+const sortBy = require('lodash').sortBy;
+
 const Trade = require('../models/trade')
 const User = require('../models/user')
+
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
@@ -16,15 +20,6 @@ router.get('/', (req, res, next) => {
     })
 });
 
-// {
-// 	"type": "Sell",
-// 	"user": {
-// 		"name": "vijay"
-// 	},
-// 	"symbol": "",
-// 	"shares": 10,
-// 	"price": 12	
-// }
 router.post('/', (req, res, next) => {
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
@@ -50,7 +45,8 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/users/:userId', (req, res, next) => {
-    const trade = Trade.findOne({'user._id': req.params.userId });
+    const userId = mongoose.Types.ObjectId(req.params.userId)
+    const trade = Trade.findOne({'user._id': userId });
     trade.exec().then( trade => {
         res.status(200).json({
             data: trade
@@ -58,7 +54,7 @@ router.get('/users/:userId', (req, res, next) => {
     })
     .catch( err => {
         console.log("error:",err)
-        res.status(401).json({
+        res.status(404).json({
             data: "User was not found"
         })
     })
@@ -78,16 +74,69 @@ router.delete('/erase', (req, res, next) => {
 
 //?type={tradeType}&start={startDate}&end={endDate}
 router.get('/stocks/:stockSymbol/trades', (req, res, next) => {
+    const stockSymbol = req.params.stockSymbol;
+    const tradeType = req.query.type;
+    const startDate = req.query.start;
+    const endDate = req.query.end;
+    const query = { symbol: stockSymbol , type: tradeType, 
+        createdAt: { $gte: moment(startDate).tz('Est').format('lll'), 
+                     $lte: moment(endDate).tz('Est').format('lll') } }
+    const trade = Trade.find(query)
+    trade.exec()
+    .then( doc => {
+        if(doc.length > 0) {
+            return res.status(200).json({
+                data: doc
+            })
+        }
+        return res.status(404).json({
+            message: "No records found!"
+        })
+    })
+    .catch( err => {
+        new Error(err)
+    })
     
-    res.status(200).json({
-        message: 'stack list'
-    });
 });
 
 // start={startDate}&end={endDate}
 router.get('/stocks/:stockSymbol/price', (req, res, next) => {
-    res.status(200).json({
-        message: 'stack list'
+    const stockSymbol = req.params.stockSymbol;
+    const startDate = req.query.start;
+    const endDate = req.query.end;
+    const query = { symbol: stockSymbol, 
+        createdAt: { $gte: moment(startDate).tz('Est').format('lll'), 
+                     $lte: moment(endDate).tz('Est').format('lll') } }
+    const trade = Trade.find(query)
+    trade.exec()
+    .then( doc => {
+        let asc = sortBy(doc, 'price')
+        if(doc.length > 0) {
+            let lowestPrice = {
+                symbol: asc[0].symbol,
+                lowest: asc[0].price
+            }
+            let highest = asc[asc.length - 1];
+            let highestPrice = {
+                symbol: highest.symbol,
+                highest: highest.price
+            }
+            return res.status(200).json({
+                 data: { 
+                     symbol: lowestPrice.symbol, 
+                     lowest: lowestPrice.lowest,  
+                     highest: highestPrice.highest 
+                }
+            })
+        }
+
+        res.status(404).json({
+            message: 'There are no trades in the given date range'
+        })
+        
+    })
+    .catch(err => {
+        new Error('error:', err)
     })
 })
 

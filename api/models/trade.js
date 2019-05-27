@@ -1,28 +1,20 @@
 const mongoose = require('mongoose');
-
-const userSchema = mongoose.Schema({
-    _id: mongoose.Types.ObjectId,
-    name: String,
-    createdAt: {
-        type: Date,
-        default: new Date()
-    }
-});
+const moment = require('moment-timezone');
 
 const tradeSchema = mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     type: String,
-    user: [ userSchema ],
+    user: Object,
     symbol: String,
     shares: Number,
     price: Number,  
     createdAt: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: moment(new Date()).tz('Est').format('lll')
     },
     updatedAt: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: moment(new Date()).tz('Est').format('lll')
     }
 });
 
