@@ -20,8 +20,8 @@ npm manifest:
     "description": "Intellect API Test",
     "main": "server.js",
     "scripts": {
-      "start": "nodemon server.js",
-      "test": "NODE_ENV=test mocha --timeout 10000 -R mocha-multi --reporter-options nyan=-,json=.results.json"
+      "start": "nodemon app.js",
+      "test": "NODE_ENV=test mocha --exit --timeout 120000"
     },
     "repository": {
       "type": "git",
@@ -50,7 +50,8 @@ npm manifest:
       "chai": "^4.2.0",
       "chai-http": "^4.3.0",
       "mocha": "^6.1.4",
-      "mockgoose": "^8.0.2"
+      "mockgoose": "^8.0.2",
+      "request": "^2.88.0"
     }
   }
 
@@ -489,7 +490,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c NODE_ENV=test mocha --timeout 10000 -R mocha-multi --reporter-options nyan=-,json=.results.json
+  Arguments: -c NODE_ENV=test mocha --exit --timeout 120000
   Directory: /Users/vijaykumar/vijay/EX/node_api_test
   Output:
   

@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     const trade = Trade.find({});
-    trade.exec( (error, trades) => {
+    trade.exec( (error, trades) => {   
         if(error) {
             return new Error("error:", error)
         }
@@ -24,6 +24,8 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
     const schema = Joi.object().keys({
         type: Joi.string().trim().required(),
+        shares: Joi.number().required(),
+        price: Joi.number().required(),
         shares: Joi.number()
         .min(10)
         .max(30),
@@ -32,7 +34,14 @@ router.post('/', (req, res, next) => {
         .max(195.65)
     })
 
-    const {value , error} = Joi.validate(req.body, schema)
+    const body = {
+        type: req.body.type,
+        shares: req.body.shares,
+        price: req.body.price
+
+    }
+    const {value , error} = Joi.validate(body, schema)
+   
     if(error && error.details) {
         return res.status(401).json(error)
     }

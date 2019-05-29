@@ -4,8 +4,8 @@
   "description": "Intellect API Test",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "test": "NODE_ENV=test mocha --exit --recursive --timeout 10000"
+    "start": "nodemon app.js",
+    "test": "NODE_ENV=test mocha --exit --timeout 120000"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.1.4",
-    "mockgoose": "^8.0.2"
+    "mockgoose": "^8.0.2",
+    "request": "^2.88.0"
   }
 }
